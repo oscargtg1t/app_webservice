@@ -8,6 +8,7 @@ header('Content-Type: application/json');
 header("400 Bad Request");
 
 $dbConn =  connect($db);
+$dbConn2 =  connect2($db2);
 
 
 //metodo GET para obtener dato de agricultor
@@ -64,6 +65,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     if($postId)
     {
       $input['id_agricultor'] = $postId;
+      header("200 OK");
+      $request =[
+        'mensaje' => "200 Ok"
+      ];
+      echo json_encode($request);
+      exit();
+	 }
+}
+
+//metodo POST para registar un userbeneficio
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+    $input = $_POST;
+    $sql = "INSERT INTO userbeneficio
+          (dpi_usuario, nombre, correo, pass, rol)
+          VALUES
+          (:dpi_usuario, :nombre, :correo, :pass, :rol)";
+    $statement = $dbConn->prepare($sql);
+    bindAllValues($statement, $input);
+    $statement->execute();
+    $postId = $dbConn->lastInsertId();
+    echo json_encode("200 Ok: Usuario Registrado");
+    if($postId)
+    {
+      $input['dpi_usuario'] = $postId;
+      header("200 OK");
+      $request =[
+        'mensaje' => "200 Ok"
+      ];
+      echo json_encode($request);
+      exit();
+	 }
+}
+
+//metodo POST para registar un agricultor
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+    $input = $_POST;
+    $sql = "INSERT INTO userpesocabal
+          (dpi_userpeso, nombre, correo_userpeso, pass)
+          VALUES
+          (:dpi_userpeso, :nombre, :correo_userpeso, :pass)";
+    $statement = $dbConn2->prepare($sql);
+    bindAllValues($statement, $input);
+    $statement->execute();
+    $postId = $dbConn->lastInsertId();
+    echo json_encode("200 Ok: Usuario Registrado");
+    if($postId)
+    {
+      $input['dpi_userpeso'] = $postId;
       header("200 OK");
       $request =[
         'mensaje' => "200 Ok"
